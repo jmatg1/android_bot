@@ -5,7 +5,7 @@ Python template for creating android bot
 1. Python 3.9.1 https://www.python.org/downloads/release/python-391/
 2. Bluestacks 5 https://www.bluestacks.com/
 3. Add path C:\Program Files\BlueStacks\ (Default Path) on the Environment Windows
-or Change hd-adb in the code to C:\Program Files\BlueStacks\hd-adb.exe
+or Change hd-adb in the code to C:\Program Files\BlueStacks\hd-adb.exe https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/
 4. In Console `py -m pip install -r requirements.txt`
 
 #Settings Bluestacks 5
