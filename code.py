@@ -23,6 +23,7 @@ class Bot:
     controlsUnderBuilding = [(576, 431), (1059, 768)]
 
     # def __init__(self):
+    # Разница между цветов. На сколько RGB Может отличаться цвет
     def shadeVariation(self, col, col2, shade=0):
         if shade == 0:
             return col == col2
@@ -33,6 +34,7 @@ class Bot:
                 shadowCount += 1
         return shadowCount == 3
 
+    # Получаем Координаты (x, y) по цвету
     def getXYByColor(self, color, isGetSCreen=True, shade=0, startXY=(0, 0), endXY=(0, 0)):
         if (isGetSCreen):
             self.getScreen()
@@ -53,6 +55,7 @@ class Bot:
                     continue
         return coordinates
 
+    # Есть ли цвет по этой коррдинате
     def pixelSearch(self, x1, y1, color):  # x2=1600, y2=900,
         # im = ImageOps.crop(im, (x1, y1, x2, y2))
         colorPixel = self.screenshot.getpixel((x1, y1))[:3]
@@ -61,6 +64,7 @@ class Bot:
         else:
             return False
 
+    # Сделать скриншот и скопировать в папку со скриптом
     def getScreen(self):
         self.shell(f'/system/bin/screencap -p /sdcard/{self.device}-screenshot.png')
         # os.system('hd-adb shell /system/bin/screencap -p /sdcard/screenshot.png')
@@ -73,6 +77,7 @@ class Bot:
             print(ValueError)
             self.getScreen()
 
+    # Получаем цвет пикселя (R, G, B)
     def getPixelColor(self, x1, y1):
         self.getScreen()
         im = Image.open(f"{self.device}-screenshot.png")
@@ -81,6 +86,7 @@ class Bot:
         pixelRGB = im.getpixel((x1, y1))[:3]
         return pixelRGB
 
+    # tap по координате
     def click(self, x, y, timer=True):
         if (timer):
             time.sleep(1)
@@ -98,10 +104,22 @@ class Bot:
 
             if self.isMainScreen(): # Главный экран
                 self.log('Main Screen')
-                if self.isEventActive():
-                    self.log('isEventActive')
-                else:
-                    self.clickPlay()
+                # if self.isEventActive():
+                #     self.log('isEventActive')
+                # else:
+                self.clickPlay()
+                continue
+
+            if self.isFightScreen():
+                self.log('Fight Screen')
+                self.click(1280, 450) # 1 skill
+                self.keyW(10000)
+                self.click(1480, 335) # 2 skill
+                continue
+
+            if self.isCollectScreen():
+                self.log('is Collect Screen')
+                self.click(680, 780) # 1 skill
                 continue
 
     def skipAds(self):
@@ -118,8 +136,14 @@ class Bot:
         else:
             return False
 
-    def isEventActive(self):
-        if self.pixelSearch(1345, 35, (25, 52, 135)):  # 1340, 30, 1350, 40,
+    def isFightScreen(self):
+        if self.pixelSearch(230, 45, (156, 201, 228)):  # 1340, 30, 1350, 40,
+            return True
+        else:
+            return False
+
+    def isCollectScreen(self):
+        if self.pixelSearch(680, 780, (106, 202, 18)):  # 1340, 30, 1350, 40,
             return True
         else:
             return False
